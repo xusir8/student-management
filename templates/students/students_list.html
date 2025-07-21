@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="right">
+  <div class="top">
+      <div class="tool">
+          <div class="class-info">
+              <form method="get" action="#">
+                   <span>学生：</span>
+                  <input type="text" name="search" placeholder="搜索名称..." value="">
+                  <input type="submit" value="搜索">
+                  <a href="#">
+                      <button type="button" class="add">新增</button>
+                  </a>
+             </form>
+          </div>
+      </div>
+  </div>
+  <div class="bottom">
+  <table>
+      <thead>
+          <tr>
+              <th>学号</th>
+              <th>姓名</th>
+              <th>性别</th>
+              <th>出生日期</th>
+              <th>联系方式</th>
+              <th>班级</th>
+              <th>操作</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for student in students %}
+          <tr>
+              <td>{{ student.student_number }}</td>
+              <td>{{ student.student_name }}</td>
+              <td>{{ student.get_gender_display }}</td>
+              <td>{{ student.birthday }}</td>
+              <td>{{ student.contact_number }}</td>
+              <td>{{ student.grade.grade_name }}</td>
+              <td>
+                  <a href="#">
+                      <button class="add">编辑</button>
+                  </a>
+                  <a href="#">
+                      <button class="del">删除</button>
+                  </a>
+              </td>
+          </tr> 
+          {% endfor %}
+      </tbody>
+  </table>
+
+  <!-- 分页导航 -->
+  <div class="pagination">
+      <span class="step-links">
+          {% if page_obj.has_previous %}
+             <a href="#">&laquo; 首页</a>
+             <a href="#">上一页</a>
+          {% endif %}
+
+          <span class="current">
+              {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+          </span>
+
+          {% if page_obj.has_next %}
+            <a href="#">下一页</a>
+            <a href="#">尾页 &raquo;</a>
+          {% endif %}
+      </span>
+  </div>
+  </div>
+</div>
+{% endblock %}  

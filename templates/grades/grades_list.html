@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="right">
+    <div class="top">
+        <div class="tool">
+            <div class="class-info">
+                <form method="get" action="{% url 'grades_list' %}">
+                    <span>班级名称:</span>
+                    <input type="text" name="search" placeholder="搜索班级名称..." value="{{ request.GET.search }}">
+                    <input type="submit" value="搜索">
+                    {% if request.GET.search %}
+                        <a href="{% url 'grades_list' %}?search=" style="margin-left:10px; color: #666;">清除搜索</a>
+                    {% endif %}
+                    <a href="{% url 'grade_create' %}">
+                        <button type="button" class="add">新增</button>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <a href="?sort=grade_name&dir={% if current_sort == 'grade_name' and current_dir == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}" style="display:block;text-decoration:none;color:#3a454f;">
+                        班级名称
+                        {% if current_sort == 'grade_name' %}
+                            {% if current_dir == 'asc' %}
+                                ▲
+                            {% else %}
+                                ▼
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=grade_number&dir={% if current_sort == 'grade_number' and current_dir == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}" style="display:block;text-decoration:none;color:#3a454f;">
+                        班级编号
+                        {% if current_sort == 'grade_number' %}
+                            {% if current_dir == 'asc' %}
+                                ▲
+                            {% else %}
+                                ▼
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for grade in grades %}
+            <tr>
+                <td>{{ grade.grade_name }}</td>
+                <td>{{ grade.grade_number }}</td>
+                <td>
+                    <a href="{% url 'grade_update' grade.id %}">
+                        <button class="add">编辑</button>
+                    </a>
+                    <a href="{% url 'grade_delete' grade.id %}">
+                        <button class="del">删除</button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+            
+        </tbody>
+    </table>
+  
+    <!-- 分页导航 -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&search={{ request.GET.search }}&sort={{ current_sort }}&dir={{ current_dir }}">首页</a>
+                <a href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search }}&sort={{ current_sort }}&dir={{ current_dir }}">上一页</a>
+            {% endif %}
+        </span>      
+  
+        <span class="current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        <span class="step-links">
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search }}&sort={{ current_sort }}&dir={{ current_dir }}">下一页</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&search={{ request.GET.search }}&sort={{ current_sort }}&dir={{ current_dir }}">尾页</a>
+
+        {% endif %}
+        </span>
+
+    </div>
+    </div>
+  
+  </div>
+{% endblock %}
